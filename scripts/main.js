@@ -178,7 +178,7 @@ function switchPage(pageId, pageContents, navTabs) {
 // Load guides content dynamically
 function loadGuidesContent() {
     // Redirect to dedicated guides page
-    window.location.href = 'subpages/poradniki.html';
+    window.location.href = 'subpages/guides.html';
 }
 
 // Update content based on selected language
