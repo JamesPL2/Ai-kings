@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools Hub - Poradniki Obsługi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            color: #333;
+        }
+
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .language-dropdown {
+            position: relative;
+        }
+
+        .language-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .language-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .language-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+
+        .language-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        .language-option:first-child {
+            border-radius: 12px 12px 0 0;
+        }
+
+        .language-option:last-child {
+            border-radius: 0 0 12px 12px;
+        }
+
+        .language-option:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        /* Guide Sections */
+        .guides {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        .guide-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .guide-section:nth-child(1) { animation-delay: 0.1s; }
+        .guide-section:nth-child(2) { animation-delay: 0.2s; }
+        .guide-section:nth-child(3) { animation-delay: 0.3s; }
+
+        .guide-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .guide-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .guide-logo {
+            width: 35px;
+            height: 35px;
+            object-fit: contain;
+            filter: brightness(1.2) contrast(1.1);
+        }
+
+        .perplexity-guide .guide-icon {
+            background: linear-gradient(135deg, #20B2AA, #40E0D0);
+        }
+
+        .google-guide .guide-icon {
+            background: linear-gradient(135deg, #4285F4, #34A853);
+        }
+
+        .genspark-guide .guide-icon {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+        }
+
+        .guide-title h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .guide-title p {
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+
+        /* Interactive Screenshot Section */
+        .screenshot-container {
+            position: relative;
+            margin: 2rem 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .screenshot {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .screenshot-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        /* Interactive Hotspots */
+        .hotspot {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: rgba(102, 126, 234, 0.9);
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        .hotspot:hover {
+            transform: scale(1.2);
+            background: rgba(102, 126, 234, 1);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .hotspot.active {
+            background: rgba(255, 107, 107, 0.9);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* Explanation Panel */
+        .explanations {
+            margin-top: 2rem;
+        }
+
+        .explanation-item {
+            background: #f8fafc;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .explanation-item.active {
+            opacity: 1;
+            background: #e6f3ff;
+            border-left-color: #FF6B6B;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .explanation-item h4 {
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .explanation-item .number {
+            background: #667eea;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .explanation-item p {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        /* Quick Access Links */
+        .quick-access {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .quick-access h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .access-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .access-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .navigation, .language-selector {
+                top: 15px;
+            }
+
+            .navigation {
+                left: 15px;
+            }
+
+            .language-selector {
+                right: 15px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .guide-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .guide-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .guides {
+                gap: 2.5rem;
+            }
+
+            .hotspot {
+                width: 25px;
+                height: 25px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .guide-section {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Focus styles */
+        .language-btn:focus, .nav-btn:focus, .access-btn:focus, .hotspot:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+        
+        .language-option:focus {
+            background-color: #e2e8f0;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <div class="navigation">
+        <a href="../index.html" class="nav-btn">
+            <i class="fas fa-home"></i>
+            <span>Powrót</span>
+        </a>
+    </div>
+
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <div class="language-dropdown">
+            <button class="language-btn" id="languageBtn">
+                <i class="fas fa-globe"></i>
+                <span id="currentLanguage">Polski</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="language-menu" id="languageMenu">
+                <button class="language-option" data-lang="pl">Polski</button>
+                <button class="language-option" data-lang="en">English</button>
+                <button class="language-option" data-lang="es">Español</button>
+                <button class="language-option" data-lang="hi">हिन्दी</button>
+                <button class="language-option" data-lang="zh">中文</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 id="mainTitle">Poradniki AI Tools</h1>
+            <p class="subtitle" id="subtitle">Interaktywne instrukcje obsługi z oznaczonymi elementami interfejsu</p>
+        </header>
+
+        <!-- Guides Section -->
+        <main class="guides">
+            <!-- Perplexity Guide -->
+            <section class="guide-section perplexity-guide">
+                <div class="guide-header">
+                    <div class="guide-icon">
+                        <img src="https://www.perplexity.ai/favicon.ico" alt="Perplexity" class="guide-logo">
+                    </div>
+                    <div class="guide-title">
+                        <h2>Perplexity</h2>
+                        <p id="perplexitySubtitle">Zaawansowana wyszukiwarka AI z aktualną wiedzą</p>
+                    </div>
+                </div>
+
+                <div class="screenshot-container">
+                    <img src="https://page.gensparksite.com/v1/base64_upload/29d8c6d2f8bd3421510e8c33a5181f3e" 
+                         alt="Perplexity Interface" 
+                         class="screenshot">
+                    <div class="screenshot-overlay">
+                        <!-- Interactive hotspots -->
+                        <div class="hotspot" style="top: 30%; left: 45%;" data-explanation="1" tabindex="0">1</div>
+                        <div class="hotspot" style="top: 45%; left: 15%;" data-explanation="2" tabindex="0">2</div>
+                        <div class="hotspot" style="top: 60%; left: 75%;" data-explanation="3" tabindex="0">3</div>
+                    </div>
+                </div>
+
+                <div class="explanations">
+                    <div class="explanation-item" data-number="1">
+                        <h4><span class="number">1</span> <span id="perplexity1Title">Pasek wyszukiwania</span></h4>
+                        <p id="perplexity1Desc">Główne pole do wprowadzania pytań. Wpisz pytanie w naturalnym języku - Perplexity rozumie złożone zapytania i kontekst.</p>
+                    </div>
+                    <div class="explanation-item" data-number="2">
+                        <h4><span class="number">2</span> <span id="perplexity2Title">Menu boczne</span></h4>
+                        <p id="perplexity2Desc">Dostęp do historii wyszukiwań, ustawień konta i zaawansowanych opcji filtrowania źródeł.</p>
+                    </div>
+                    <div class="explanation-item" data-number="3">
+                        <h4><span class="number">3</span> <span id="perplexity3Title">Opcje wyszukiwania</span></h4>
+                        <p id="perplexity3Desc">Przyciski do wyboru trybu wyszukiwania, w tym tryb Pro dla bardziej zaawansowanych analiz.</p>
+                    </div>
+                </div>
+
+                <div class="quick-access">
+                    <h4 id="perplexityAccessTitle">Wypróbuj Perplexity</h4>
+                    <a href="https://www.perplexity.ai/" class="access-btn" target="_blank" rel="noopener,noreferrer">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span id="perplexityAccessBtn">Otwórz Perplexity</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Google AI Studio Guide -->
+            <section class="guide-section google-guide">
+                <div class="guide-header">
+                    <div class="guide-icon">
+                        <img src="https://www.google.com/favicon.ico" alt="Google AI Studio" class="guide-logo">
+                    </div>
+                    <div class="guide-title">
+                        <h2>Google AI Studio</h2>
+                        <p id="googleSubtitle">Platforma prototypowania z modelami Gemini</p>
+                    </div>
+                </div>
+
+                <div class="screenshot-container">
+                    <img src="https://page.gensparksite.com/v1/base64_upload/93e79f12be8bc5e954a95c80b4c0bc45" 
+                         alt="Google AI Studio Interface" 
+                         class="screenshot">
+                    <div class="screenshot-overlay">
+                        <!-- Interactive hotspots -->
+                        <div class="hotspot" style="top: 25%; left: 50%;" data-explanation="4" tabindex="0">1</div>
+                        <div class="hotspot" style="top: 40%; left: 20%;" data-explanation="5" tabindex="0">2</div>
+                        <div class="hotspot" style="top: 55%; left: 80%;" data-explanation="6" tabindex="0">3</div>
+                    </div>
+                </div>
+
+                <div class="explanations">
+                    <div class="explanation-item" data-number="4">
+                        <h4><span class="number">1</span> <span id="google1Title">Centrum promptów</span></h4>
+                        <p id="google1Desc">Główny obszar do tworzenia i testowania promptów. Wybierz typ: Text prompt, Chat lub Structured data.</p>
+                    </div>
+                    <div class="explanation-item" data-number="5">
+                        <h4><span class="number">2</span> <span id="google2Title">Panel boczny</span></h4>
+                        <p id="google2Desc">Zarządzanie projektami, dostęp do historii, przykładowych promptów i dokumentacji API.</p>
+                    </div>
+                    <div class="explanation-item" data-number="6">
+                        <h4><span class="number">3</span> <span id="google3Title">Ustawienia modelu</span></h4>
+                        <p id="google3Desc">Konfiguracja parametrów Gemini: Temperature, Safety settings, wybór wersji modelu (Pro, Flash, Ultra).</p>
+                    </div>
+                </div>
+
+                <div class="quick-access">
+                    <h4 id="googleAccessTitle">Rozpocznij z Google AI Studio</h4>
+                    <a href="https://aistudio.google.com/" class="access-btn" target="_blank" rel="noopener,noreferrer">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span id="googleAccessBtn">Otwórz Google AI Studio</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Genspark Guide -->
+            <section class="guide-section genspark-guide">
+                <div class="guide-header">
+                    <div class="guide-icon">
+                        <img src="https://www.genspark.ai/favicon.ico" alt="Genspark" class="guide-logo">
+                    </div>
+                    <div class="guide-title">
+                        <h2>Genspark</h2>
+                        <p id="gensparkSubtitle">Kompleksowa platforma AI dla biznesu</p>
+                    </div>
+                </div>
+
+                <div class="screenshot-container">
+                    <img src="https://page.gensparksite.com/v1/base64_upload/ceb1abc1863451abea5d007ede6f5c28" 
+                         alt="Genspark Interface" 
+                         class="screenshot">
+                    <div class="screenshot-overlay">
+                        <!-- Interactive hotspots -->
+                        <div class="hotspot" style="top: 20%; left: 50%;" data-explanation="7" tabindex="0">1</div>
+                        <div class="hotspot" style="top: 35%; left: 50%;" data-explanation="8" tabindex="0">2</div>
+                        <div class="hotspot" style="top: 50%; left: 50%;" data-explanation="9" tabindex="0">3</div>
+                    </div>
+                </div>
+
+                <div class="explanations">
+                    <div class="explanation-item" data-number="7">
+                        <h4><span class="number">1</span> <span id="genspark1Title">Super Agent Chat</span></h4>
+                        <p id="genspark1Desc">Główny interfejs konwersacyjny. Wpisz zapytanie aby otrzymać spersonalizowane odpowiedzi z różnych źródeł AI.</p>
+                    </div>
+                    <div class="explanation-item" data-number="8">
+                        <h4><span class="number">2</span> <span id="genspark2Title">Pasek narzędzi AI</span></h4>
+                        <p id="genspark2Desc">Szybki dostęp do specjalistycznych narzędzi: analiza dokumentów, generowanie obrazów, kod, prezentacje i więcej.</p>
+                    </div>
+                    <div class="explanation-item" data-number="9">
+                        <h4><span class="number">3</span> <span id="genspark3Title">Sparkpage Preview</span></h4>
+                        <p id="genspark3Desc">Podgląd generowanych spersonalizowanych stron z kompleksową analizą tematu, wykresami i danymi.</p>
+                    </div>
+                </div>
+
+                <div class="quick-access">
+                    <h4 id="gensparkAccessTitle">Odkryj możliwości Genspark</h4>
+                    <a href="https://www.genspark.ai/" class="access-btn" target="_blank" rel="noopener,noreferrer">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span id="gensparkAccessBtn">Otwórz Genspark</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Language translations for guides page
+        const translations = {
+            pl: {
+                mainTitle: "Poradniki AI Tools",
+                subtitle: "Interaktywne instrukcje obsługi z oznaczonymi elementami interfejsu",
+                
+                // Perplexity
+                perplexitySubtitle: "Zaawansowana wyszukiwarka AI z aktualną wiedzą",
+                perplexity1Title: "Pasek wyszukiwania",
+                perplexity1Desc: "Główne pole do wprowadzania pytań. Wpisz pytanie w naturalnym języku - Perplexity rozumie złożone zapytania i kontekst.",
+                perplexity2Title: "Menu boczne",
+                perplexity2Desc: "Dostęp do historii wyszukiwań, ustawień konta i zaawansowanych opcji filtrowania źródeł.",
+                perplexity3Title: "Opcje wyszukiwania",
+                perplexity3Desc: "Przyciski do wyboru trybu wyszukiwania, w tym tryb Pro dla bardziej zaawansowanych analiz.",
+                perplexityAccessTitle: "Wypróbuj Perplexity",
+                perplexityAccessBtn: "Otwórz Perplexity",
+                
+                // Google AI Studio
+                googleSubtitle: "Platforma prototypowania z modelami Gemini",
+                google1Title: "Centrum promptów",
+                google1Desc: "Główny obszar do tworzenia i testowania promptów. Wybierz typ: Text prompt, Chat lub Structured data.",
+                google2Title: "Panel boczny",
+                google2Desc: "Zarządzanie projektami, dostęp do historii, przykładowych promptów i dokumentacji API.",
+                google3Title: "Ustawienia modelu",
+                google3Desc: "Konfiguracja parametrów Gemini: Temperature, Safety settings, wybór wersji modelu (Pro, Flash, Ultra).",
+                googleAccessTitle: "Rozpocznij z Google AI Studio",
+                googleAccessBtn: "Otwórz Google AI Studio",
+                
+                // Genspark
+                gensparkSubtitle: "Kompleksowa platforma AI dla biznesu",
+                genspark1Title: "Super Agent Chat",
+                genspark1Desc: "Główny interfejs konwersacyjny. Wpisz zapytanie aby otrzymać spersonalizowane odpowiedzi z różnych źródeł AI.",
+                genspark2Title: "Pasek narzędzi AI",
+                genspark2Desc: "Szybki dostęp do specjalistycznych narzędzi: analiza dokumentów, generowanie obrazów, kod, prezentacje i więcej.",
+                genspark3Title: "Sparkpage Preview",
+                genspark3Desc: "Podgląd generowanych spersonalizowanych stron z kompleksową analizą tematu, wykresami i danymi.",
+                gensparkAccessTitle: "Odkryj możliwości Genspark",
+                gensparkAccessBtn: "Otwórz Genspark"
+            },
+            en: {
+                mainTitle: "AI Tools Guides",
+                subtitle: "Interactive user guides with marked interface elements",
+                
+                // Perplexity
+                perplexitySubtitle: "Advanced AI search engine with current knowledge",
+                perplexity1Title: "Search Bar",
+                perplexity1Desc: "Main field for entering questions. Type your question in natural language - Perplexity understands complex queries and context.",
+                perplexity2Title: "Side Menu",
+                perplexity2Desc: "Access to search history, account settings and advanced source filtering options.",
+                perplexity3Title: "Search Options",
+                perplexity3Desc: "Buttons to choose search mode, including Pro mode for more advanced analysis.",
+                perplexityAccessTitle: "Try Perplexity",
+                perplexityAccessBtn: "Open Perplexity",
+                
+                // Google AI Studio
+                googleSubtitle: "Prototyping platform with Gemini models",
+                google1Title: "Prompt Center",
+                google1Desc: "Main area for creating and testing prompts. Choose type: Text prompt, Chat or Structured data.",
+                google2Title: "Side Panel",
+                google2Desc: "Project management, access to history, sample prompts and API documentation.",
+                google3Title: "Model Settings",
+                google3Desc: "Gemini parameter configuration: Temperature, Safety settings, model version selection (Pro, Flash, Ultra).",
+                googleAccessTitle: "Get Started with Google AI Studio",
+                googleAccessBtn: "Open Google AI Studio",
+                
+                // Genspark
+                gensparkSubtitle: "Comprehensive AI platform for business",
+                genspark1Title: "Super Agent Chat",
+                genspark1Desc: "Main conversational interface. Type your query to receive personalized responses from various AI sources.",
+                genspark2Title: "AI Tools Bar",
+                genspark2Desc: "Quick access to specialized tools: document analysis, image generation, code, presentations and more.",
+                genspark3Title: "Sparkpage Preview",
+                genspark3Desc: "Preview of generated personalized pages with comprehensive topic analysis, charts and data.",
+                gensparkAccessTitle: "Discover Genspark Capabilities",
+                gensparkAccessBtn: "Open Genspark"
+            },
+            es: {
+                mainTitle: "Guías de Herramientas AI",
+                subtitle: "Instrucciones interactivas con elementos de interfaz marcados",
+                
+                // Perplexity
+                perplexitySubtitle: "Motor de búsqueda AI avanzado con conocimiento actual",
+                perplexity1Title: "Barra de Búsqueda",
+                perplexity1Desc: "Campo principal para introducir preguntas. Escribe tu pregunta en lenguaje natural - Perplexity entiende consultas complejas y contexto.",
+                perplexity2Title: "Menú Lateral",
+                perplexity2Desc: "Acceso al historial de búsquedas, configuración de cuenta y opciones avanzadas de filtrado de fuentes.",
+                perplexity3Title: "Opciones de Búsqueda",
+                perplexity3Desc: "Botones para elegir el modo de búsqueda, incluyendo modo Pro para análisis más avanzados.",
+                perplexityAccessTitle: "Prueba Perplexity",
+                perplexityAccessBtn: "Abrir Perplexity",
+                
+                // Google AI Studio
+                googleSubtitle: "Plataforma de prototipado con modelos Gemini",
+                google1Title: "Centro de Prompts",
+                google1Desc: "Área principal para crear y probar prompts. Elige tipo: Text prompt, Chat o Structured data.",
+                google2Title: "Panel Lateral",
+                google2Desc: "Gestión de proyectos, acceso a historial, prompts de ejemplo y documentación de API.",
+                google3Title: "Configuración del Modelo",
+                google3Desc: "Configuración de parámetros Gemini: Temperature, Safety settings, selección de versión del modelo (Pro, Flash, Ultra).",
+                googleAccessTitle: "Comienza con Google AI Studio",
+                googleAccessBtn: "Abrir Google AI Studio",
+                
+                // Genspark
+                gensparkSubtitle: "Plataforma AI integral para negocios",
+                genspark1Title: "Chat de Super Agente",
+                genspark1Desc: "Interfaz conversacional principal. Escribe tu consulta para recibir respuestas personalizadas de varias fuentes AI.",
+                genspark2Title: "Barra de Herramientas AI",
+                genspark2Desc: "Acceso rápido a herramientas especializadas: análisis de documentos, generación de imágenes, código, presentaciones y más.",
+                genspark3Title: "Vista Previa de Sparkpage",
+                genspark3Desc: "Vista previa de páginas personalizadas generadas con análisis integral del tema, gráficos y datos.",
+                gensparkAccessTitle: "Descubre las Capacidades de Genspark",
+                gensparkAccessBtn: "Abrir Genspark"
+            },
+            hi: {
+                mainTitle: "AI टूल्स गाइड",
+                subtitle: "चिह्नित इंटरफेस तत्वों के साथ इंटरैक्टिव उपयोगकर्ता गाइड",
+                
+                // Perplexity
+                perplexitySubtitle: "वर्तमान ज्ञान के साथ उन्नत AI सर्च इंजन",
+                perplexity1Title: "खोज बार",
+                perplexity1Desc: "प्रश्न दर्ज करने के लिए मुख्य क्षेत्र। प्राकृतिक भाषा में अपना प्रश्न टाइप करें - Perplexity जटिल प्रश्न और संदर्भ को समझता है।",
+                perplexity2Title: "साइड मेनू",
+                perplexity2Desc: "खोज इतिहास, खाता सेटिंग्स और उन्नत स्रोत फ़िल्टरिंग विकल्पों तक पहुंच।",
+                perplexity3Title: "खोज विकल्प",
+                perplexity3Desc: "खोज मोड चुनने के लिए बटन, अधिक उन्नत विश्लेषण के लिए Pro मोड सहित।",
+                perplexityAccessTitle: "Perplexity आज़माएं",
+                perplexityAccessBtn: "Perplexity खोलें",
+                
+                // Google AI Studio
+                googleSubtitle: "Gemini मॉडल के साथ प्रोटोटाइपिंग प्लेटफॉर्म",
+                google1Title: "प्रॉम्प्ट सेंटर",
+                google1Desc: "प्रॉम्प्ट बनाने और परीक्षण के लिए मुख्य क्षेत्र। प्रकार चुनें: Text prompt, Chat या Structured data।",
+                google2Title: "साइड पैनल",
+                google2Desc: "प्रोजेक्ट प्रबंधन, इतिहास तक पहुंच, नमूना प्रॉम्प्ट और API दस्तावेज़।",
+                google3Title: "मॉडल सेटिंग्स",
+                google3Desc: "Gemini पैरामीटर कॉन्फ़िगरेशन: Temperature, Safety settings, मॉडल संस्करण चयन (Pro, Flash, Ultra)।",
+                googleAccessTitle: "Google AI Studio के साथ शुरुआत करें",
+                googleAccessBtn: "Google AI Studio खोलें",
+                
+                // Genspark
+                gensparkSubtitle: "व्यापार के लिए व्यापक AI प्लेटफॉर्म",
+                genspark1Title: "सुपर एजेंट चैट",
+                genspark1Desc: "मुख्य संवादात्मक इंटरफेस। विभिन्न AI स्रोतों से व्यक्तिगत उत्तर प्राप्त करने के लिए अपना प्रश्न टाइप करें।",
+                genspark2Title: "AI टूल्स बार",
+                genspark2Desc: "विशेष उपकरणों तक त्वरित पहुंच: दस्तावेज़ विश्लेषण, छवि निर्माण, कोड, प्रस्तुतियाँ और अधिक।",
+                genspark3Title: "Sparkpage पूर्वावलोकन",
+                genspark3Desc: "व्यापक विषय विश्लेषण, चार्ट और डेटा के साथ उत्पन्न व्यक्तिगत पृष्ठों का पूर्वावलोकन।",
+                gensparkAccessTitle: "Genspark की क्षमताओं की खोज करें",
+                gensparkAccessBtn: "Genspark खोलें"
+            },
+            zh: {
+                mainTitle: "AI工具指南",
+                subtitle: "带有标记界面元素的交互式用户指南",
+                
+                // Perplexity
+                perplexitySubtitle: "具有最新知识的高级AI搜索引擎",
+                perplexity1Title: "搜索栏",
+                perplexity1Desc: "输入问题的主要区域。用自然语言输入您的问题 - Perplexity理解复杂查询和上下文。",
+                perplexity2Title: "侧边菜单",
+                perplexity2Desc: "访问搜索历史、账户设置和高级源过滤选项。",
+                perplexity3Title: "搜索选项",
+                perplexity3Desc: "选择搜索模式的按钮，包括用于更高级分析的Pro模式。",
+                perplexityAccessTitle: "试用Perplexity",
+                perplexityAccessBtn: "打开Perplexity",
+                
+                // Google AI Studio
+                googleSubtitle: "使用Gemini模型的原型平台",
+                google1Title: "提示中心",
+                google1Desc: "创建和测试提示的主要区域。选择类型：Text prompt、Chat或Structured data。",
+                google2Title: "侧边面板",
+                google2Desc: "项目管理，访问历史记录、示例提示和API文档。",
+                google3Title: "模型设置",
+                google3Desc: "Gemini参数配置：Temperature、Safety settings、模型版本选择（Pro、Flash、Ultra）。",
+                googleAccessTitle: "开始使用Google AI Studio",
+                googleAccessBtn: "打开Google AI Studio",
+                
+                // Genspark
+                gensparkSubtitle: "面向企业的综合AI平台",
+                genspark1Title: "超级代理聊天",
+                genspark1Desc: "主要对话界面。输入您的查询以从各种AI源接收个性化响应。",
+                genspark2Title: "AI工具栏",
+                genspark2Desc: "快速访问专业工具：文档分析、图像生成、代码、演示文稿等。",
+                genspark3Title: "Sparkpage预览",
+                genspark3Desc: "生成的个性化页面预览，包含全面的主题分析、图表和数据。",
+                gensparkAccessTitle: "发现Genspark的功能",
+                gensparkAccessBtn: "打开Genspark"
+            }
+        };
+
+        // Language names in their native scripts
+        const languageNames = {
+            pl: "Polski",
+            en: "English",
+            es: "Español",
+            hi: "हिन्दी",
+            zh: "中文"
+        };
+
+        // Current language
+        let currentLanguage = 'pl';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved language preference
+            const savedLanguage = localStorage.getItem('aiToolsLanguage');
+            if (savedLanguage && translations[savedLanguage]) {
+                currentLanguage = savedLanguage;
+                updateContent();
+            }
+
+            // Language dropdown functionality
+            const languageBtn = document.getElementById('languageBtn');
+            const languageMenu = document.getElementById('languageMenu');
+            const currentLanguageSpan = document.getElementById('currentLanguage');
+
+            languageBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                languageMenu.classList.toggle('active');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!languageBtn.contains(e.target) && !languageMenu.contains(e.target)) {
+                    languageMenu.classList.remove('active');
+                }
+            });
+
+            // Language option selection
+            const languageOptions = document.querySelectorAll('.language-option');
+            languageOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const selectedLang = this.getAttribute('data-lang');
+                    if (selectedLang !== currentLanguage) {
+                        currentLanguage = selectedLang;
+                        updateContent();
+                        localStorage.setItem('aiToolsLanguage', currentLanguage);
+                    }
+                    languageMenu.classList.remove('active');
+                });
+            });
+
+            // Hotspot interactions
+            const hotspots = document.querySelectorAll('.hotspot');
+            const explanationItems = document.querySelectorAll('.explanation-item');
+
+            hotspots.forEach(hotspot => {
+                hotspot.addEventListener('click', function() {
+                    const explanationNumber = this.getAttribute('data-explanation');
+                    highlightExplanation(explanationNumber);
+                });
+
+                hotspot.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+
+                hotspot.addEventListener('mouseenter', function() {
+                    const explanationNumber = this.getAttribute('data-explanation');
+                    highlightExplanation(explanationNumber);
+                });
+            });
+
+            // Auto-highlight first explanation for each section
+            setTimeout(() => {
+                const firstHotspots = document.querySelectorAll('.hotspot[data-explanation="1"], .hotspot[data-explanation="4"], .hotspot[data-explanation="7"]');
+                firstHotspots.forEach(hotspot => {
+                    hotspot.classList.add('active');
+                });
+                highlightExplanation('1');
+            }, 1000);
+        });
+
+        // Highlight explanation and corresponding hotspot
+        function highlightExplanation(number) {
+            // Remove all active states
+            document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
+            document.querySelectorAll('.explanation-item').forEach(e => e.classList.remove('active'));
+
+            // Add active state to selected elements
+            const activeHotspot = document.querySelector(`[data-explanation="${number}"]`);
+            const activeExplanation = document.querySelector(`[data-number="${number}"]`);
+
+            if (activeHotspot) activeHotspot.classList.add('active');
+            if (activeExplanation) {
+                activeExplanation.classList.add('active');
+                activeExplanation.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // Update content based on selected language
+        function updateContent() {
+            const trans = translations[currentLanguage];
+            const currentLanguageSpan = document.getElementById('currentLanguage');
+            
+            // Update language display
+            currentLanguageSpan.textContent = languageNames[currentLanguage];
+            
+            // Update all content elements
+            Object.keys(trans).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = trans[key];
+                }
+            });
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = currentLanguage;
+        }
+
+        // ESC key to close language menu
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('languageMenu').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

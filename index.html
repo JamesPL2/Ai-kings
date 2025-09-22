@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Tools Hub - Najlepsze Narzędzia AI</title>
+    <title>AI Tools Hub - Najpotężniejsze Narzędzia AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-	<style>
-	* {
+    <style>
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -21,10 +21,45 @@ body {
     line-height: 1.6;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
+/* Top Navigation */
+.top-navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.nav-tab {
+    padding: 0.8rem 2rem;
+    border: none;
+    background: transparent;
+    color: #4a5568;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-tab.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.nav-tab:not(.active):hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
 }
 
 /* Language Selector */
@@ -32,7 +67,7 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 1000;
+    z-index: 1001; /* Upewniamy się, że jest nad nawigacją */
 }
 
 .language-dropdown {
@@ -105,6 +140,22 @@ body {
     background-color: #f8f9fa;
 }
 
+/* Main Content */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 6rem 1rem 2rem;
+}
+
+/* Content Pages */
+.page-content {
+    display: none;
+}
+
+.page-content.active {
+    display: block;
+}
+
 /* Header */
 .header {
     text-align: center;
@@ -119,7 +170,7 @@ body {
     margin-bottom: 1rem;
 }
 
-/* AI Tools */
+/* AI Tools (Tutaj są wszystkie Twoje ulepszenia) */
 .ai-tools {
     display: flex;
     flex-direction: column;
@@ -167,7 +218,6 @@ body {
     filter: brightness(1.2) contrast(1.1);
 }
 
-/* Specific icon styles for better branding */
 .perplexity-icon {
     background: linear-gradient(135deg, #20B2AA, #40E0D0);
     box-shadow: 0 4px 15px rgba(32, 178, 170, 0.3);
@@ -215,7 +265,16 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        padding: 1rem;
+        padding: 5rem 1rem 2rem;
+    }
+
+    .top-navigation {
+        padding: 0.8rem 1rem;
+    }
+
+    .nav-tab {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
     }
 
     .language-selector {
@@ -316,11 +375,32 @@ body {
 .tool-card:nth-child(3) {
     animation-delay: 0.3s;
 }
-	</style>
-	
+
+/* Focus styles (Zachowane, bo są przydatne) */
+.tool-card:focus {
+    outline: 3px solid #667eea;
+    outline-offset: 2px;
+}
+
+.language-btn:focus, .nav-tab:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+.language-option:focus {
+    background-color: #e2e8f0;
+    outline: none;
+}
+    </style>
 </head>
 
 <body>
+    <!-- Top Navigation -->
+    <nav class="top-navigation">
+        <button class="nav-tab active" data-page="strona-glowna" id="stronaGlownaTab">Strona główna</button>
+        <button class="nav-tab" data-page="poradniki" id="poradnikiTab">Poradniki</button>
+    </nav>
+
     <!-- Language Selector -->
     <div class="language-selector">
         <div class="language-dropdown">
@@ -339,64 +419,82 @@ body {
         </div>
     </div>
 
+    <!-- Main Content -->
     <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <h1 id="mainTitle">Wybierz jedno z najpotężniejszych narzędzi AI:</h1>
-        </header>
+        <!-- Strona Główna Page -->
+        <div id="strona-glowna" class="page-content active">
+            <header class="header">
+                <h1 id="mainTitle">Wybierz jedno z najpotężniejszych narzędzi AI:</h1>
+            </header>
 
-        <!-- AI Tools Section -->
-        <main class="ai-tools">
-            <!-- Perplexity -->
-            <div class="tool-card" data-url="https://www.perplexity.ai/">
-                <div class="tool-icon perplexity-icon">
-                    <img src="https://www.perplexity.ai/favicon.ico" alt="Perplexity" class="tool-logo">
+            <main class="ai-tools">
+                <!-- Perplexity -->
+                <div class="tool-card" data-url="https://www.perplexity.ai/" tabindex="0">
+                    <div class="tool-icon perplexity-icon">
+                        <img src="https://www.perplexity.ai/favicon.ico" alt="Perplexity" class="tool-logo">
+                    </div>
+                    <div class="tool-content">
+                        <h2 class="tool-name">Perplexity</h2>
+                        <p class="tool-description" id="perplexityDesc">
+                            Zaawansowana wyszukiwarka AI, która dostarcza dokładne odpowiedzi z aktualnych źródeł internetowych w czasie rzeczywistym.
+                        </p>
+                    </div>
+                    <div class="tool-arrow">
+                        <i class="fas fa-external-link-alt"></i>
+                    </div>
                 </div>
-                <div class="tool-content">
-                    <h2 class="tool-name">Perplexity</h2>
-                    <p class="tool-description" id="perplexityDesc">
-                        Zaawansowana wyszukiwarka AI, która dostarcza dokładne odpowiedzi z aktualnych źródeł internetowych w czasie rzeczywistym.
-                    </p>
+
+                <!-- Google AI Studio -->
+                <div class="tool-card" data-url="https://aistudio.google.com/" tabindex="0">
+                    <div class="tool-icon google-icon">
+                        <img src="https://www.google.com/favicon.ico" alt="Google AI Studio" class="tool-logo">
+                    </div>
+                    <div class="tool-content">
+                        <h2 class="tool-name">Google AI Studio</h2>
+                        <p class="tool-description" id="googleDesc">
+                            Platforma do prototypowania i testowania modeli AI Google, umożliwiająca tworzenie aplikacji z wykorzystaniem Gemini API.
+                        </p>
+                    </div>
+                    <div class="tool-arrow">
+                        <i class="fas fa-external-link-alt"></i>
+                    </div>
                 </div>
-                <div class="tool-arrow">
-                    <i class="fas fa-external-link-alt"></i>
+
+                <!-- Genspark -->
+                <div class="tool-card" data-url="https://www.genspark.ai/" tabindex="0">
+                    <div class="tool-icon genspark-icon">
+                        <img src="https://www.genspark.ai/favicon.ico" alt="Genspark" class="tool-logo">
+                    </div>
+                    <div class="tool-content">
+                        <h2 class="tool-name">Genspark</h2>
+                        <p class="tool-description" id="gensparkDesc">
+                            Kompleksowa platforma AI oferująca zaawansowane narzędzia do generowania treści, analizy danych i automatyzacji zadań biznesowych.
+                        </p>
+                    </div>
+                    <div class="tool-arrow">
+                        <i class="fas fa-external-link-alt"></i>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Poradniki Page -->
+        <div id="poradniki" class="page-content">
+            <header class="header">
+                <h1 id="guidesTitle">Poradniki AI Tools</h1>
+                <p id="guidesSubtitle" style="color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-top: 0.5rem;">Szczegółowe instrukcje obsługi najpotężniejszych narzędzi AI</p>
+            </header>
+            
+            <div id="guidesContent">
+                <!-- Content will be loaded dynamically -->
+                <div style="text-align: center; color: rgba(255,255,255,0.8); padding: 2rem;">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p style="margin-top: 1rem;">Ładowanie poradników...</p>
                 </div>
             </div>
-
-            <!-- Google AI Studio -->
-            <div class="tool-card" data-url="https://aistudio.google.com/">
-                <div class="tool-icon google-icon">
-                    <img src="https://www.google.com/favicon.ico" alt="Google AI Studio" class="tool-logo">
-                </div>
-                <div class="tool-content">
-                    <h2 class="tool-name">Google AI Studio</h2>
-                    <p class="tool-description" id="googleDesc">
-                        Platforma do prototypowania i testowania modeli AI Google, umożliwiająca tworzenie aplikacji z wykorzystaniem Gemini API.
-                    </p>
-                </div>
-                <div class="tool-arrow">
-                    <i class="fas fa-external-link-alt"></i>
-                </div>
-            </div>
-
-            <!-- Genspark -->
-            <div class="tool-card" data-url="https://www.genspark.ai/">
-                <div class="tool-icon genspark-icon">
-                    <img src="https://www.genspark.ai/favicon.ico" alt="Genspark" class="tool-logo">
-                </div>
-                <div class="tool-content">
-                    <h2 class="tool-name">Genspark</h2>
-                    <p class="tool-description" id="gensparkDesc">
-                        Kompleksowa platforma AI oferująca zaawansowane narzędzia do generowania treści, analizy danych i automatyzacji zadań biznesowych.
-                    </p>
-                </div>
-                <div class="tool-arrow">
-                    <i class="fas fa-external-link-alt"></i>
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
 
-    <script src="scripts/main.js"></script>
+	<script src="scripts/main.js" defer></script>
 </body>
 </html>
